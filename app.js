@@ -872,21 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
     avatarProfileBtn.addEventListener('click', () => navigateToView('settings'));
   }
 
-  // ==========================================
-  // FULLSCREEN DESKTOP TOGGLE
-  // ==========================================
-  const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
-  if (fullscreenToggleBtn) {
-    fullscreenToggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('fullscreen-mode');
-      const icon = fullscreenToggleBtn.querySelector('span');
-      if (icon) {
-        icon.textContent = document.body.classList.contains('fullscreen-mode') 
-          ? 'Exit Desktop View' 
-          : 'Toggle Desktop View';
-      }
-    });
-  }
+
 
   // ==========================================
   // 9. DATA RENDERING & SEPARATION (BS/AD ISOLATION)
