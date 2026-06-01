@@ -1,0 +1,17 @@
+{
+  "name": "pala-heritage-calendar",
+  "version": "1.0.0",
+  "description": "Traditional Bengali calendar and heritage record keeper",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080"
+  },
+  "keywords": [
+    "bengali",
+    "calendar",
+    "heritage",
+    "record-keeper"
+  ],
+  "author": "Antigravity Pair Programmer",
+  "license": "ISC"
+}

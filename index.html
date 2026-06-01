@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pala - Temple Duty Allocation & Priest Scheduling Admin Panel</title>
+  <meta name="description" content="Premium temple admin panel to manage, allocate, and schedule priest service turns (Palas) on traditional Bengali and English calendars.">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Background Traditional Geometric Pattern for Desktops -->
+  <div class="desktop-pattern-bg"></div>
+
+  <!-- Toggle Fullscreen Button (Desktop Experience Optimizer) -->
+  <button class="fullscreen-toggle-btn" id="fullscreenToggleBtn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+    </svg>
+    <span>Toggle Desktop View</span>
+  </button>
+
+  <!-- Presentation Wrapper -->
+  <div class="app-container-wrapper">
+    <div class="phone-mockup-frame">
+      
+      <!-- Mock Device Status Bar -->
+      <div class="mock-status-bar">
+        <span id="statusBarTime">20:45</span>
+        <div class="status-bar-icons">
+          <!-- Signal Icon -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="2" y="16" width="3" height="5" rx="1"/>
+            <rect x="7" y="12" width="3" height="9" rx="1"/>
+            <rect x="12" y="8" width="3" height="13" rx="1"/>
+            <rect x="17" y="3" width="3" height="18" rx="1"/>
+          </svg>
+          <!-- Wifi Icon -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
+          </svg>
+          <!-- Battery Icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="16" height="10" rx="2" ry="2"/>
+            <line x1="22" y1="11" x2="22" y2="13"/>
+            <rect x="5" y="10" width="10" height="4" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- App Header -->
+      <header class="app-header" id="appHeader">
+        <button class="app-header-btn" id="menuDrawerBtn" aria-label="Open navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+        </button>
+        <span class="app-logo-title" id="appHeaderTitle">Pala Admin</span>
+        
+        <div style="display:flex; align-items:center;">
+          <!-- Quick Language Toggle Button (WOW feature next to avatar) -->
+          <button id="headerLanguageToggleBtn" aria-label="Quick language toggle" style="background-color: var(--color-accent-gold-pale); border: 1.5px solid var(--color-accent-gold-border); padding: 5px 12px; border-radius: 14px; font-weight: 700; font-size: 11px; font-family: var(--font-sans); color: var(--color-primary-maroon); cursor: pointer; margin-right: 10px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+            <span>EN</span>
+          </button>
+          
+          <div class="app-profile-avatar" id="avatarProfileBtn" aria-label="Open settings profile">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=120&auto=format&fit=crop" alt="Temple Admin Avatar">
+          </div>
+        </div>
+      </header>
+
+      <!-- App Slide Navigation Drawer -->
+      <div class="side-drawer-overlay" id="drawerOverlay"></div>
+      <aside class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+          <span class="drawer-title" id="drawerTitle">Pala Admin</span>
+          <button class="drawer-close" id="drawerCloseBtn" aria-label="Close drawer">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <nav class="drawer-menu-list">
+          <a class="drawer-menu-item" id="drawerItemHome">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span id="drawerTextHome">Admin Dashboard</span>
+          </a>
+          <a class="drawer-menu-item" id="drawerItemRecords">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span id="drawerTextRecords">Duty Allocations</span>
+          </a>
+          <a class="drawer-menu-item" id="drawerItemAlerts">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span id="drawerTextAlerts">Temple Alerts</span>
+          </a>
+          <a class="drawer-menu-item" id="drawerItemSettings">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span id="drawerTextSettings">Admin Settings</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Dynamic App Viewport -->
+      <main class="app-view-port" id="appViewport">
+
+        <!-- 1. VIEW: WELCOME ERA SELECTION -->
+        <section class="app-view welcome-view" id="welcomeView">
+          <div class="welcome-container">
+            <div class="welcome-title-wrap">
+              <h1 id="welcomeUserGreeting">Welcome back,<br>Admin</h1>
+              <p id="welcomeSubtitle">Select your preferred calendar to allocate temple Palas.</p>
+            </div>
+            
+            <!-- Era Selection Cards -->
+            <article class="welcome-card-selector" id="selectBSEraBtn">
+              <div class="selector-icon-wrap icon-bg-pink">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </div>
+              <h2>বাংলা ক্যালেন্ডার</h2>
+              <p>Traditional Bengali Era (BS)</p>
+              <span class="welcome-card-tag tag-maroon">Temple Choice</span>
+            </article>
+
+            <article class="welcome-card-selector" id="selectADEraBtn">
+              <div class="selector-icon-wrap icon-bg-yellow">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <h2>English Calendar</h2>
+              <p>Gregorian Calendar (AD)</p>
+              <span class="welcome-card-tag tag-yellow">Global Standard</span>
+            </article>
+          </div>
+        </section>
+
+        <!-- 2. VIEW: HOME / DASHBOARD -->
+        <section class="app-view home-view active-view" id="homeView">
+          <div class="home-container">
+            
+            <!-- Greet Header -->
+            <div class="home-greet-row">
+              <div class="greet-text">
+                <h2 id="homeGreetTime">Good Evening,</h2>
+                <h1 id="homeGreetName">Temple Admin</h1>
+                <div class="greet-sub-date" id="homeHeaderEraDate"></div>
+              </div>
+              <div class="greet-badge-era" id="homeEraBadge"></div>
+            </div>
+
+            <!-- Stats Column Grid -->
+            <div class="stats-grid-row">
+              <div class="stat-card-widget" id="statsRecordsWidgetBtn">
+                <span class="stat-title" id="statLabelTotal">Total</span>
+                <span class="stat-number" id="statsTotalCount">00</span>
+                <span class="stat-desc" id="statLabelPalas">Palas</span>
+              </div>
+              <div class="stat-card-widget" id="statsEventsWidgetBtn">
+                <span class="stat-title" id="statLabelUpcoming">Upcoming</span>
+                <span class="stat-number" id="statsUpcomingCount">00</span>
+                <span class="stat-desc" id="statLabelShifts">Shifts</span>
+              </div>
+              <div class="stat-card-widget" id="statsMonthWidgetBtn">
+                <span class="stat-title" id="statLabelActive">Active</span>
+                <span class="stat-number" id="statsMonthActiveCount">00</span>
+                <span class="stat-desc" id="statLabelPriests">Priests</span>
+              </div>
+            </div>
+
+            <!-- Calendar Widget Card -->
+            <article class="calendar-card">
+              <div class="calendar-card-header">
+                <span class="calendar-card-title" id="calendarWidgetMonthTitle">Poush 1430</span>
+                <div class="calendar-nav-btns">
+                  <button class="calendar-nav-btn" id="calendarPrevMonthBtn" aria-label="Previous month">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button class="calendar-nav-btn" id="calendarNextMonthBtn" aria-label="Next month">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Calendar Dates Grid -->
+              <div class="calendar-matrix">
+                <div class="calendar-matrix-weekdays">
+                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <div class="calendar-matrix-days" id="calendarWidgetDaysGrid">
+                  <!-- Generated Dynamically via JS -->
+                </div>
+              </div>
+            </article>
+
+            <!-- Today's Highlights Section -->
+            <div class="section-headline-row">
+              <h3 id="headlineTitle">Today's Palas</h3>
+              <span class="section-headline-badge" id="headlineStatus">Live</span>
+            </div>
+            
+            <!-- Dynamic today highlight — rendered by JS based on real inputted data -->
+            <div id="todayHighlightContainer">
+              <!-- Rendered dynamically via JS -->
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 3. VIEW: CALENDAR DAY DETAIL SCREEN -->
+        <section class="app-view cal-detail-view" id="calendarDetailView">
+          <div class="cal-detail-container">
+            
+            <!-- Navigation Back Row -->
+            <div style="display: flex; align-items: center; margin-bottom: 4px;">
+              <button class="app-header-btn" id="calDetailBackBtn" style="margin-left: -12px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+              </button>
+              <span id="calDetailBackLabel" style="font-weight: 600; font-size: 16px; margin-left: 4px; color: var(--color-text-dark)">Calendar View</span>
+            </div>
+
+            <!-- Day Header Banner -->
+            <div class="detail-header-day">
+              <span class="day-label" id="detailDayOfWeek">Thursday</span>
+              <h1 id="detailBSDate">14 Poush, 1430</h1>
+              <div class="sec-date-txt" id="detailADDate">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>28 December, 2023</span>
+              </div>
+            </div>
+
+            <!-- Section Head -->
+            <div class="section-headline-row">
+              <h3 id="palaEntriesHeadline">Pala Allocations</h3>
+              <span class="section-headline-badge" id="detailEntriesCountBadge">0 Records</span>
+            </div>
+
+            <!-- Dynamic Record Cards for Day -->
+            <div class="entries-card-list" id="detailDayCardsContainer">
+              <!-- Rendered via JS -->
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 4. VIEW: RECORDS LIST & FILTERS -->
+        <section class="app-view records-view" id="recordsView">
+          <div class="records-container">
+            
+            <!-- Elegant Search Input Box -->
+            <div class="search-filter-box">
+              <svg class="search-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" placeholder="Search records..." id="recordsSearchInput">
+              <button class="filter-action-btn" id="recordsSortToggleBtn" aria-label="Toggle filters options">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                  <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Horizontal Scrolling Filter Chips -->
+            <div class="horizontal-chips-wrapper horizontal-scroll">
+              <span class="filter-chip active-chip" data-filter="name">Name</span>
+              <span class="filter-chip" data-filter="date">Date</span>
+              <span class="filter-chip" data-filter="month">Month</span>
+              <span class="filter-chip" data-filter="address">Address</span>
+            </div>
+
+            <!-- Dynamic Records Card List -->
+            <div class="entries-card-list" id="recordsListContainer">
+              <!-- Rendered dynamically in JS -->
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 5. VIEW: CHRONOLOGY ALERTS -->
+        <section class="app-view alerts-view" id="alertsView">
+          <div class="alerts-container">
+            
+            <div class="alerts-header">
+              <h1>Alerts</h1>
+              <p>Track and organize temple duty allocations.</p>
+            </div>
+
+            <!-- Tab Toggles -->
+            <div class="alert-tab-headers">
+              <button class="alert-tab-btn active-tab" data-alert-tab="upcoming">Upcoming</button>
+              <button class="alert-tab-btn" data-alert-tab="today">Today</button>
+              <button class="alert-tab-btn" data-alert-tab="history">History</button>
+            </div>
+
+            <!-- Alerts List Timeline -->
+            <div class="entries-card-list" id="alertsListContainer">
+              <!-- Preloaded chronologies rendered in JS -->
+            </div>
+
+            <!-- Bottom Empty notification center -->
+            <div class="alert-empty-box" id="alertsEmptyState">
+              <div class="alert-bell-silent">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+              </div>
+              <p>No more alerts for today</p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 6. VIEW: SETTINGS PREFERENCES -->
+        <section class="app-view settings-view" id="settingsView">
+          <div class="settings-container">
+            
+            <!-- Profile Premium Header (Editable) -->
+            <div class="settings-profile-card">
+              <div class="settings-avatar-wrap">
+                <div class="settings-avatar-img">
+                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=120&auto=format&fit=crop" alt="Admin Avatar">
+                </div>
+                <span class="settings-premium-badge" id="settingsPremiumBadge">Chief Admin</span>
+              </div>
+              <!-- Tap to edit name -->
+              <div class="editable-name-wrap" id="editableNameWrap">
+                <h2 id="settingsUserName" class="editable-name-display">Temple Administrator</h2>
+                <button class="edit-name-btn" id="editNameBtn" aria-label="Edit administrator name">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+              </div>
+              <!-- Inline name editor (hidden by default) -->
+              <div class="editable-name-input-wrap" id="editableNameInputWrap" style="display:none;">
+                <input type="text" class="form-text-input" id="adminNameInput" placeholder="Enter administrator name" style="margin-bottom:6px;">
+                <input type="text" class="form-text-input" id="adminTempleInput" placeholder="Temple name / designation" style="margin-bottom:8px;">
+                <div style="display:flex;gap:8px;">
+                  <button class="btn-submit-form" id="saveAdminNameBtn" style="flex:1;padding:8px;font-size:13px;">Save</button>
+                  <button class="btn-cancel-form" id="cancelAdminNameBtn" style="flex:1;padding:8px;font-size:13px;">Cancel</button>
+                </div>
+              </div>
+              <p id="settingsUserEmail" style="color:var(--color-text-light); font-size:13px; margin-top:4px;">admin@templeboard.org</p>
+            </div>
+
+            <!-- Preferences Block -->
+            <div class="settings-group-label">Preferences</div>
+            <div class="settings-card-group">
+              
+              <div class="settings-item-row" id="toggleCalendarTypeBtn">
+                <div class="settings-item-left">
+                  <div class="settings-item-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3>Switch Calendar Type</h3>
+                    <p id="settingsActiveEraDesc">Traditional Bengali Era (BS)</p>
+                  </div>
+                </div>
+                <div class="settings-item-right">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Real Dynamic Language Switcher under Preferences -->
+              <div class="settings-item-row" id="toggleLanguageSettingRow">
+                <div class="settings-item-left">
+                  <div class="settings-item-icon" style="background-color: #ECEFF1; color: #455A64;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 id="settingsLanguageTitle">Language Selection</h3>
+                    <p id="settingsLanguageValue">English (US)</p>
+                  </div>
+                </div>
+                <div class="settings-item-right">
+                  <span id="settingsLanguageSwitchText" class="settings-badge-sub" style="cursor:pointer; font-weight:700; padding:6px 10px;">EN</span>
+                </div>
+              </div>
+
+              <div class="settings-item-row" style="cursor: default;">
+                <div class="settings-item-left">
+                  <div class="settings-item-icon" style="background-color: #FEF9EB; color: #B48A14;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3>Theme Selection</h3>
+                    <p id="settingsActiveThemeDesc">Light Mode</p>
+                  </div>
+                </div>
+                <div class="settings-item-right">
+                  <input type="checkbox" id="themeSelectorSwitch" class="toggle-switch-input">
+                  <label for="themeSelectorSwitch" class="toggle-switch-label"></label>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Data & Continuity Block -->
+            <div class="settings-group-label">Data & Continuity</div>
+            <div class="settings-card-group">
+              
+              <div class="settings-item-row" id="settingsExportBtn">
+                <div class="settings-item-left">
+                  <div class="settings-item-icon" style="background-color: #E8F5E9; color: var(--color-success)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3>Export Data</h3>
+                    <div style="display: flex; gap: 6px; margin-top: 4px;">
+                      <span class="settings-badge-sub">CSV</span>
+                      <span class="settings-badge-sub">PDF</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="settings-item-right">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="settings-item-row" id="settingsBackupBtn">
+                <div class="settings-item-left">
+                  <div class="settings-item-icon" style="background-color: #ECEFF1; color: #607D8B;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1"></path>
+                      <path d="M18 8h2a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2"></path>
+                      <path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3>Backup & Sync</h3>
+                    <p id="settingsSyncText">Last synced: 2m ago</p>
+                  </div>
+                </div>
+                <div class="settings-item-right">
+                  <button class="app-header-btn" id="settingsSyncReloadBtn" style="width: 32px; height: 32px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <polyline points="1 20 1 14 7 14"></polyline>
+                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Information Block -->
+            <div class="settings-group-label">Information</div>
+            <div class="settings-card-group">
+              <div class="settings-item-row" style="cursor: default;">
+                <div class="settings-item-left">
+                  <div class="settings-item-icon" style="background-color: #ECEFF1; color: #546E7A;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3>About App</h3>
+                    <p>Version 1430.4.2</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sign Out action button -->
+            <button class="settings-sign-out-btn" id="settingsSignOutBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span>Sign Out</span>
+            </button>
+
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom Floating Action Button (FAB) + -->
+      <button class="pala-floating-btn" id="palaFabBtn" aria-label="Add new Pala entry">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+
+      <!-- Bottom Tab Bar -->
+      <nav class="bottom-nav-bar">
+        <a class="nav-tab-item tab-selected" id="bottomTabHome" data-tab="home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Home</span>
+        </a>
+        <a class="nav-tab-item" id="bottomTabCalendar" data-tab="calendar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span>Calendar</span>
+        </a>
+        <a class="nav-tab-item" id="bottomTabRecords" data-tab="records">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Records</span>
+        </a>
+        <a class="nav-tab-item" id="bottomTabAlerts" data-tab="alerts">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span>Alerts</span>
+        </a>
+        <a class="nav-tab-item" id="bottomTabSettings" data-tab="settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <!-- Add Pala Entry Bottom Sheet Slide Modal -->
+      <div class="pala-modal-overlay" id="palaModalOverlay"></div>
+      <div class="pala-bottom-sheet" id="palaBottomSheet">
+        <div class="bottom-sheet-drag-handle"></div>
+        <div class="bottom-sheet-header">
+          <span class="bottom-sheet-title" id="bottomSheetFormTitle">Allocate Temple Pala</span>
+          <button class="bottom-sheet-close" id="palaModalCloseBtn" aria-label="Close sheet">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Interactive Form -->
+        <form id="palaAddEntryForm" style="display:contents;">
+          <!-- Hidden Input for Editing Tracking -->
+          <input type="hidden" id="formEditEntryId" value="">
+          
+          <div class="bottom-sheet-body">
+            
+            <!-- Person Name -->
+            <div class="form-group" id="formGroupName">
+              <label class="form-input-label" for="formPersonName">Pala Holder Name</label>
+              <input type="text" class="form-text-input" id="formPersonName" placeholder="e.g. Amitabh Mukherjee">
+              <div class="form-input-error-msg" id="formNameError">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <span>Full name is required for registration</span>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+              <label class="form-input-label" for="formAddress">Address</label>
+              <input type="text" class="form-text-input" id="formAddress" placeholder="e.g. Gariahat, South Kolkata">
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="form-group">
+              <label class="form-input-label" for="formMobile">Mobile Number</label>
+              <input type="tel" class="form-text-input" id="formMobile" placeholder="e.g. +91 98765 43210">
+            </div>
+            
+            <!-- Payment Section -->
+            <div class="form-group payment-section-wrap">
+              <label class="form-input-label" id="formPaymentLabel">Payment Status</label>
+              
+              <!-- Paid / Unpaid Toggle Row -->
+              <div class="payment-toggle-row">
+                <div class="payment-status-indicator" id="paymentStatusIndicator">
+                  <span class="payment-status-dot unpaid-dot" id="paymentStatusDot"></span>
+                  <span class="payment-status-text" id="paymentStatusText">Not Paid</span>
+                </div>
+                <label class="payment-toggle-label" for="formPaymentToggle">
+                  <input type="checkbox" id="formPaymentToggle" class="payment-toggle-input">
+                  <span class="payment-toggle-slider"></span>
+                </label>
+              </div>
+
+              <!-- Amount Input — shown only when paid -->
+              <div class="payment-amount-wrap" id="paymentAmountWrap" style="display:none;">
+                <div class="payment-amount-inner">
+                  <span class="payment-currency-symbol" id="paymentCurrencySymbol">₹</span>
+                  <input type="number" 
+                         class="form-text-input payment-amount-input" 
+                         id="formPaymentAmount" 
+                         placeholder="0.00"
+                         min="0"
+                         step="0.01">
+                </div>
+                <p class="payment-amount-hint" id="paymentAmountHint">Enter the amount paid for this Pala turn</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="bottom-sheet-footer">
+            <button type="submit" class="btn-submit-form" id="btnSubmitFormText">Save Entry</button>
+            <button type="button" class="btn-cancel-form" id="palaModalCancelBtn">Cancel</button>
+          </div>
+        </form>
+
+      </div>
+
+      <!-- Delete Confirmation Modal / Prompt dialog overlay -->
+      <div class="pala-dialog-overlay" id="palaDeleteDialogOverlay">
+        <div class="pala-dialog-box">
+          <h2>Delete Record?</h2>
+          <p>Are you sure you want to delete this duty allocation? This action is permanent and cannot be undone.</p>
+          <div class="pala-dialog-btns">
+            <button class="pala-dialog-btn btn-confirm" id="btnConfirmDelete">Delete</button>
+            <button class="pala-dialog-btn btn-cancel" id="btnCancelDelete">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
