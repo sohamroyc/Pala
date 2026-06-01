@@ -9,12 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // FIREBASE CLOUD DATABASE CONFIGURATION & FALLBACKS
   // ==========================================
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyA4zncddPve7KMVu6lqy0hUL4UTzMYfcxU",
+    authDomain: "pala-admin.firebaseapp.com",
+    projectId: "pala-admin",
+    storageBucket: "pala-admin.firebasestorage.app",
+    messagingSenderId: "756682651160",
+    appId: "1:756682651160:web:ee98b2b4e1d55083eaf56d",
+    measurementId: "G-2FW5EK108N"
   };
 
   let db = null;
