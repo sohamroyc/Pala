@@ -6,6 +6,80 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================
+  // FIREBASE CLOUD DATABASE CONFIGURATION & FALLBACKS
+  // ==========================================
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  let db = null;
+  let isFirebaseReady = false;
+
+  try {
+    if (typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.firestore();
+      isFirebaseReady = true;
+      console.log("Firebase Firestore cloud database initialized successfully!");
+    } else {
+      console.warn("Firebase not loaded or credentials not set. Running in local-only mode.");
+    }
+  } catch (err) {
+    console.error("Failed to initialize Firebase Firestore:", err);
+  }
+
+  function syncLocalDataToCloud() {
+    if (!isFirebaseReady || !db) return;
+    const adminId = state.adminName || 'default_admin';
+    
+    db.collection("pala_data").doc(adminId).set({
+      recordsBS: state.recordsBS,
+      recordsAD: state.recordsAD,
+      adminTemple: state.adminTemple,
+      lastSynced: new Date().toISOString()
+    })
+    .then(() => {
+      console.log("Cloud backup completed successfully.");
+    })
+    .catch((error) => {
+      console.error("Error backing up to cloud:", error);
+    });
+  }
+
+  function pullDataFromCloud() {
+    if (!isFirebaseReady || !db) {
+      showDynamicAlertNotification(state.language === 'BN' ? 'ক্লাউড কনফিগার করা নেই!' : 'Cloud storage is not configured!');
+      return;
+    }
+    const adminId = state.adminName || 'default_admin';
+    
+    db.collection("pala_data").doc(adminId).get()
+    .then((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        if (data.recordsBS) state.recordsBS = data.recordsBS;
+        if (data.recordsAD) state.recordsAD = data.recordsAD;
+        if (data.adminTemple) state.adminTemple = data.adminTemple;
+        
+        saveStateToStorage(true); // pass true to prevent recursive cloud sync call
+        navigateToView(state.activeTab);
+        showDynamicAlertNotification(state.language === 'BN' ? 'ক্লাউড থেকে ডেটা সিঙ্ক সম্পন্ন!' : 'Data pulled from Cloud database!');
+      } else {
+        showDynamicAlertNotification(state.language === 'BN' ? 'কোনো ব্যাকআপ পাওয়া যায়নি!' : 'No cloud backup found for this admin!');
+      }
+    })
+    .catch((error) => {
+      console.error("Error pulling from cloud database:", error);
+      showDynamicAlertNotification(state.language === 'BN' ? 'ক্লাউড সিঙ্ক ব্যর্থ হয়েছে!' : 'Cloud pull operation failed!');
+    });
+  }
+
+  // ==========================================
   // 1. STATE & STORAGE INITIALIZATION
   // ==========================================
   
@@ -30,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Sync to LocalStorage
-  function saveStateToStorage() {
+  function saveStateToStorage(skipCloudSync = false) {
     localStorage.setItem('pala_recordsBS', JSON.stringify(state.recordsBS));
     localStorage.setItem('pala_recordsAD', JSON.stringify(state.recordsAD));
     localStorage.setItem('pala_alerts', JSON.stringify(state.alerts));
@@ -39,6 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('pala_theme', state.theme);
     localStorage.setItem('pala_adminName', state.adminName);
     localStorage.setItem('pala_adminTemple', state.adminTemple);
+
+    if (!skipCloudSync) {
+      syncLocalDataToCloud();
+    }
   }
 
   function getActiveRecords() {
@@ -1433,11 +1511,13 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsSyncReloadBtn.style.animation = "spin 1s infinite linear";
     settingsSyncText.textContent = state.language === 'BN' ? 'সিঙ্ক করা হচ্ছে...' : 'Syncing local databases...';
     
+    // Pull from Firebase Cloud Database
+    pullDataFromCloud();
+    
     setTimeout(() => {
       settingsSyncReloadBtn.style.animation = "";
       settingsSyncText.textContent = state.language === 'BN' ? 'শেষ সিঙ্ক: এইমাত্র' : 'Last synced: Just now';
-      showDynamicAlertNotification(getLocText('notifySyncSuccess'));
-    }, 1200);
+    }, 1500);
   });
 
   document.getElementById('settingsSignOutBtn').addEventListener('click', () => {
@@ -1670,7 +1750,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set correct tab text translations for bottom navigation in Bengali on init
   translateUI();
   
-  navigateToView('home');
+  navigateToView('welcome');
 
   // Dynamic floating notification alerts helper
   function showDynamicAlertNotification(text) {
